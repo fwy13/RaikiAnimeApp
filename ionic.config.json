@@ -1,0 +1,7 @@
+{
+  "name": "RaikiAnimeApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
