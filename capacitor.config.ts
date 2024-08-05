@@ -1,9 +1,14 @@
-import type { CapacitorConfig } from '@capacitor/cli';
+import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'RaikiAnimeApp',
-  webDir: 'dist'
+    appId: "git.fwy13.RaikiAManga",
+    appName: "RaikiManga",
+    webDir: "dist",
+    plugins: {
+        CapacitorHttp: {
+            enabled: true,
+        },
+    },
 };
 
 export default config;
