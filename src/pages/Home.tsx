@@ -5,8 +5,19 @@ import { BaseUrl, getChapter } from "../constant";
 import { CapacitorHttp, HttpResponse } from "@capacitor/core";
 import { GetOption, Http } from "client-ext-animevsub-helper";
 import { Link } from "react-router-dom";
+import { uint8ToBase64 } from "../logic/base64";
 
 // const MangaSupported = ["nettruyen"];
+
+function arrayBufferToBase64(buffer: any) {
+    let binary = '';
+    let bytes = new Uint8Array(buffer);
+    let len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+}
 
 type DataManga = {
     title: string;
@@ -176,22 +187,23 @@ const Home = () => {
                 const bestRating = $("[itemprop=bestRating]").text();
                 const ratingCount = $("[itemprop=ratingCount]").text();
                 const follow = $(".number_follow").text();
-                // if (imageManga) {
-                //     const optImage: GetOption = {
-                //         url: imageManga,
-                //         responseType: "arraybuffer",
-                //         headers: {
-                //             referer: BaseUrl,
-                //         },
-                //     };
-                //     const ResponseImg = await (import.meta.env.DEV
-                //         ? Http
-                //         : CapacitorHttp
-                //     ).get(optImage);
-                //     const blob = new Blob([ResponseImg.data]);
-                //     const url = URL.createObjectURL(blob);
-                //     setImage(url);
-                // }
+                if (imageManga) {
+                    const optImage: GetOption = {
+                        url: imageManga,
+                        responseType: "arraybuffer",
+                        headers: {
+                            referer: BaseUrl,
+                        },
+                    };
+                    const ResponseImg = await (import.meta.env.DEV
+                        ? Http
+                        : CapacitorHttp
+                    ).get(optImage);
+                    // const blob = new Blob([ResponseImg.data]);
+                    // console.log(arrayBufferToBase64(ResponseImg.data))
+                    // const url = URL.createObjectURL(blob);
+                    setImage(arrayBufferToBase64(ResponseImg.data));
+                }
 
                 const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
                 const firstDate: number | any = new Date();
@@ -259,6 +271,11 @@ const Home = () => {
                 {DataManga ? (
                     <div className="flex flex-col gap-4">
                         <div className="flex gap-4">
+                            <img
+                                src={`data:image/jpeg;base64,${Image}`}
+                                alt={DataManga.title}
+                                className="rounded-md w-1/3 h-auto"
+                            />
                             <img
                                 src={
                                     DataManga.image
@@ -376,10 +393,14 @@ const Home = () => {
                         </div>
                         <div className="grid grid-cols-4 grid-rows-3 gap-2">
                             {DataManga.chapters.map((el, i) => (
-                                <Link to={`${el.url.split("/")[2]}-${el.url.split("/")[3].slice(8)}-${el.url.split("/")[4]}`} key={i}>
+                                <Link
+                                    to={`${el.url.split("/")[2]}-${el.url
+                                        .split("/")[3]
+                                        .slice(8)}-${el.url.split("/")[4]}`}
+                                    key={i}
+                                >
                                     <div className="p-2 border border-rose-500 text-rose-500 text-center">
                                         {el.name}
-                                        
                                     </div>
                                 </Link>
                             ))}
