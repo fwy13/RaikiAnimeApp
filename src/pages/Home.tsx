@@ -246,7 +246,7 @@ const Home = () => {
                 ) : (
                     <span className="text-success">Loading data success!</span>
                 )}
-                {DataManga && Image ? (
+                {DataManga ? (
                     <div className="flex flex-col gap-4">
                         <div className="flex gap-4">
                             <img
