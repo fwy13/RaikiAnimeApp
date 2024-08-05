@@ -127,6 +127,7 @@ const Home = () => {
                         return data;
                     });
                 if (res.status === 200) {
+                    setIsLoading(false);
                     setError(false);
                 } else {
                     setIsLoading(false);
@@ -134,6 +135,11 @@ const Home = () => {
                 }
                 const $ = Cheerio.load(res.data);
                 const imageManga = $(".col-image").find("img").attr("src");
+                const searchComicId: number | any = newLink?.search(
+                    comicId ?? ""
+                );
+                const imageSrc = newLink?.slice(0, searchComicId - 1);
+                setImage(imageSrc);
                 const titleManga = $(".title-detail").text();
                 const timeUpdate = $("#item-detail")
                     .find(".small")
@@ -169,27 +175,30 @@ const Home = () => {
                 const bestRating = $("[itemprop=bestRating]").text();
                 const ratingCount = $("[itemprop=ratingCount]").text();
                 const follow = $(".number_follow").text();
-                if (imageManga) {
-                    const optImage: GetOption = {
-                        url: imageManga,
-                        responseType: "arraybuffer",
-                        headers: {
-                            referer: BaseUrl,
-                        },
-                    };
-                    const ResponseImg = await (import.meta.env.DEV
-                        ? Http
-                        : CapacitorHttp
-                    ).get(optImage);
-                    const blob = new Blob([ResponseImg.data]);
-                    const url = URL.createObjectURL(blob);
-                    setImage(url);
-                }
+                // if (imageManga) {
+                //     const optImage: GetOption = {
+                //         url: imageManga,
+                //         responseType: "arraybuffer",
+                //         headers: {
+                //             referer: BaseUrl,
+                //         },
+                //     };
+                //     const ResponseImg = await (import.meta.env.DEV
+                //         ? Http
+                //         : CapacitorHttp
+                //     ).get(optImage);
+                //     const blob = new Blob([ResponseImg.data]);
+                //     const url = URL.createObjectURL(blob);
+                //     setImage(url);
+                // }
 
                 const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-                const firstDate: number | any = new Date(2008, 1, 12);
-                const secondDate: number | any = new Date();
-
+                const firstDate: number | any = new Date();
+                const secondDate: number | any = new Date(
+                    Number(timeUpdate[3].split("-")[0]),
+                    Number(timeUpdate[3].split("-")[1]),
+                    Number(timeUpdate[3].split("-")[2])
+                );
                 const diffDays = Math.round(
                     Math.abs((firstDate - secondDate) / oneDay)
                 );
@@ -253,7 +262,7 @@ const Home = () => {
                                 src={
                                     DataManga.image
                                         ? DataManga.image
-                                        : "https://cmnvymn.com/nettruyen/thumb/mato-seihei-no-slave.jpg"
+                                        : `https://cmnvymn.com/nettruyen/thumb/${Image}.jpg`
                                 }
                                 alt={DataManga.title}
                                 onLoad={() => {
@@ -365,10 +374,10 @@ const Home = () => {
                             </div>
                         </div>
                         <div className="grid grid-cols-4 grid-rows-3 gap-2">
-                            {DataManga.chapters.map((el) => (
+                            {DataManga.chapters.map((el, i) => (
                                 <div
                                     className="p-2 border border-rose-500 text-rose-500 text-center"
-                                    key={el.name}
+                                    key={i}
                                 >
                                     {el.name}
                                 </div>
