@@ -4,6 +4,7 @@ import * as Cheerio from "cheerio";
 import { BaseUrl, getChapter } from "../constant";
 import { CapacitorHttp, HttpResponse } from "@capacitor/core";
 import { GetOption, Http } from "client-ext-animevsub-helper";
+import { Link } from "react-router-dom";
 
 // const MangaSupported = ["nettruyen"];
 
@@ -225,7 +226,7 @@ const Home = () => {
         }
     };
     return (
-        <main className="mt-5 p-3 gap-2 flex flex-col">
+        <main className="mt-5 p-3 gap-2 flex flex-col overflow-y-auto h-[calc(100vh)]">
             <span className="p-1 text-xl text-red-500">Raiki Manga</span>
             <label className="input input-bordered flex items-center mt-3">
                 <input
@@ -375,12 +376,12 @@ const Home = () => {
                         </div>
                         <div className="grid grid-cols-4 grid-rows-3 gap-2">
                             {DataManga.chapters.map((el, i) => (
-                                <div
-                                    className="p-2 border border-rose-500 text-rose-500 text-center"
-                                    key={i}
-                                >
-                                    {el.name}
-                                </div>
+                                <Link to={`${el.url.split("/")[2]}-${el.url.split("/")[3].slice(8)}-${el.url.split("/")[4]}`} key={i}>
+                                    <div className="p-2 border border-rose-500 text-rose-500 text-center">
+                                        {el.name}
+                                        
+                                    </div>
+                                </Link>
                             ))}
                         </div>
                     </div>
