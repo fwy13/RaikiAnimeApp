@@ -188,7 +188,7 @@ const Home = () => {
 
                 const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
                 const firstDate: number | any = new Date(2008, 1, 12);
-                const secondDate: number | any = new Date(2008, 1, 22);
+                const secondDate: number | any = new Date();
 
                 const diffDays = Math.round(
                     Math.abs((firstDate - secondDate) / oneDay)
@@ -250,7 +250,11 @@ const Home = () => {
                     <div className="flex flex-col gap-4">
                         <div className="flex gap-4">
                             <img
-                                src={Image ? Image : ""}
+                                src={
+                                    DataManga.image
+                                        ? DataManga.image
+                                        : "https://cmnvymn.com/nettruyen/thumb/mato-seihei-no-slave.jpg"
+                                }
                                 alt={DataManga.title}
                                 onLoad={() => {
                                     setIsLoading(false);
