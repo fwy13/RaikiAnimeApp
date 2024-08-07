@@ -2,9 +2,8 @@ import { Route } from "react-router-dom";
 import { IonApp, IonRouterOutlet } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import Home from "./pages/Home";
-import Manga from "./pages/Manga";
-
-// setupIonicReact();
+import Manga from "./pages/Watch";
+import MangaInfo from "./pages/MangaInfo";
 
 // if (import.meta.env.DEV) {
 import("eruda2")
@@ -20,8 +19,9 @@ const App: React.FC = () => (
     <IonApp>
         <IonReactRouter>
             <IonRouterOutlet>
-                <Route path="/" component={Home} />
-                <Route path="/:manga" component={Manga} />
+                <Route exact path="/" component={Home} />
+                <Route exact path="/watch/:nameManga/:chapter/:chapterId" component={Manga} />
+                <Route exact path="/manga/:name" component={MangaInfo}/>
             </IonRouterOutlet>
         </IonReactRouter>
     </IonApp>
