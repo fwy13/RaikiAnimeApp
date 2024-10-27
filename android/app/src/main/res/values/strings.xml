@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">RaikiManga</string>
-    <string name="title_activity_main">RaikiManga</string>
-    <string name="package_name">git.fwy13.RaikiAManga</string>
-    <string name="custom_url_scheme">git.fwy13.RaikiAManga</string>
+    <string name="app_name">NeptuneAnime</string>
+    <string name="title_activity_main">NeptuneAnime</string>
+    <string name="package_name">git.fwy13.NeptuneAnime</string>
+    <string name="custom_url_scheme">git.fwy13.NeptuneAnime</string>
 </resources>

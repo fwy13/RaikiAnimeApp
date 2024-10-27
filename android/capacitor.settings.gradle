@@ -5,6 +5,9 @@ project(':capacitor-android').projectDir = new File('../node_modules/.pnpm/@capa
 include ':capacitor-app'
 project(':capacitor-app').projectDir = new File('../node_modules/.pnpm/@capacitor+app@6.0.0_@capacitor+core@6.1.1/node_modules/@capacitor/app/android')
 
+include ':capacitor-browser'
+project(':capacitor-browser').projectDir = new File('../node_modules/.pnpm/@capacitor+browser@6.0.1_@capacitor+core@6.1.1/node_modules/@capacitor/browser/android')
+
 include ':capacitor-haptics'
 project(':capacitor-haptics').projectDir = new File('../node_modules/.pnpm/@capacitor+haptics@6.0.0_@capacitor+core@6.1.1/node_modules/@capacitor/haptics/android')
 
@@ -13,3 +16,9 @@ project(':capacitor-keyboard').projectDir = new File('../node_modules/.pnpm/@cap
 
 include ':capacitor-status-bar'
 project(':capacitor-status-bar').projectDir = new File('../node_modules/.pnpm/@capacitor+status-bar@6.0.0_@capacitor+core@6.1.1/node_modules/@capacitor/status-bar/android')
+
+include ':capacitor-toast'
+project(':capacitor-toast').projectDir = new File('../node_modules/.pnpm/@capacitor+toast@6.0.1_@capacitor+core@6.1.1/node_modules/@capacitor/toast/android')
+
+include ':hugotomazi-capacitor-navigation-bar'
+project(':hugotomazi-capacitor-navigation-bar').projectDir = new File('../node_modules/.pnpm/@hugotomazi+capacitor-navigation-bar@4.0.1_@capacitor+core@6.1.1/node_modules/@hugotomazi/capacitor-navigation-bar/android')

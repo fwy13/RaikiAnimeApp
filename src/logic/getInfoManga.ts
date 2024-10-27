@@ -1,100 +1,18 @@
-import { CapacitorHttp, HttpResponse } from "@capacitor/core";
-import { Http } from "client-ext-animevsub-helper";
-import { BaseUrl, getChapter } from "../constant";
 import * as Cheerio from "cheerio";
-import { DataChapters, DataManga, typeManga } from "../types/typeManga";
-import { Dispatch, SetStateAction } from "react";
+import { DataChapters, typeManga } from "../types/TypeApp";
+import checkHomeRedict from "../utils/checkHomeRedict";
 
 const GetInfoManga = async ({
-    url,
-    setDataManga,
-    setIsLoading,
-    setError,
-    setImage,
+    html,
+    DataChapter,
 }: {
-    url: string;
-    setDataManga: Dispatch<SetStateAction<DataManga | undefined>>;
-    setIsLoading: Dispatch<SetStateAction<boolean>>;
-    setError: Dispatch<SetStateAction<boolean>>;
-    setImage: Dispatch<SetStateAction<string | undefined>>;
+    html: string;
+    DataChapter: DataChapters;
 }) => {
-    const comicId = url.split("-")[url.split("-").length - 1];
-    const DataChapter: DataChapters = await (import.meta.env.DEV
-        ? Http
-        : CapacitorHttp
-    )
-        .get({
-            url: `${getChapter}${comicId}`,
-            responseType: "json",
-            headers: {
-                accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-                // "accept-encoding": "deflate, br",
-                "accept-language": "vi-VN,vi;q=0.9,en;q=0.8,ja;q=0.7",
-                "cache-control": "max-age=0",
-                dnt: "1",
-                "sec-ch-ua":
-                    '"Google Chrome";v="105", "Not)A;Brand";v="8", "Chromium";v="105"',
-                "sec-ch-ua-mobile": "?0",
-                "sec-ch-ua-platform": "Windows",
-                "sec-fetch-dest": "document",
-                "sec-fetch-mode": "navigate",
-                "sec-fetch-site": "none",
-                "sec-fetch-user": "?1",
-                "sec-gpc": "1",
-                "upgrade-insecure-requests": "1",
-                "user-agent":
-                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
-                referer: BaseUrl,
-            },
-        })
-        .then((data) => {
-            return data.data;
-        });
-    const opt = {
-        url: `${BaseUrl}/truyen-tranh/${url}`,
-        header: {
-            accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-            // "accept-encoding": "deflate, br",
-            "accept-language": "vi-VN,vi;q=0.9,en;q=0.8,ja;q=0.7",
-            "cache-control": "max-age=0",
-            dnt: "1",
-            "sec-ch-ua":
-                '"Google Chrome";v="105", "Not)A;Brand";v="8", "Chromium";v="105"',
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": "Windows",
-            "sec-fetch-dest": "document",
-            "sec-fetch-mode": "navigate",
-            "sec-fetch-site": "none",
-            "sec-fetch-user": "?1",
-            "sec-gpc": "1",
-            "upgrade-insecure-requests": "1",
-            "user-agent":
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
-            referer: BaseUrl,
-        },
-    };
-    const res = await (import.meta.env.DEV ? Http : CapacitorHttp)
-        .get(opt)
-        .then((data: HttpResponse) => {
-            return data;
-        });
-    if (res.status === 200) {
-        setIsLoading(false);
-        setError(false);
-    } else {
-        setIsLoading(false);
-        setError(true);
-    }
-    const $ = Cheerio.load(res.data);
+    const $ = Cheerio.load(html);
+    // console.log(checkHomeRedict($))
     const imageManga = $(".col-image").find("img").attr("src");
-    const searchComicId: number | any = url?.search(comicId ?? "");
-    const imageSrc = url?.slice(0, searchComicId - 1);
-    setImage(imageSrc);
     const titleManga = $(".title-detail").text();
-    if (titleManga.length === 0) {
-        setIsLoading(false);
-        setError(true);
-    }
     const timeUpdate = $("#item-detail")
         .find(".small")
         .text()
@@ -129,24 +47,6 @@ const GetInfoManga = async ({
     const bestRating = $("[itemprop=bestRating]").text();
     const ratingCount = $("[itemprop=ratingCount]").text();
     const follow = $(".number_follow").text();
-    // if (imageManga) {
-    //     const optImage: GetOption = {
-    //         url: imageManga,
-    //         responseType: "arraybuffer",
-    //         headers: {
-    //             referer: BaseUrl,
-    //         },
-    //     };
-    //     const ResponseImg = await (import.meta.env.DEV
-    //         ? Http
-    //         : CapacitorHttp
-    //     ).get(optImage);
-    //     // const blob = new Blob([ResponseImg.data]);
-    //     // console.log(arrayBufferToBase64(ResponseImg.data))
-    //     // const url = URL.createObjectURL(blob);
-    //     setImage(arrayBufferToBase64(ResponseImg.data));
-    // }
-
     const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
     const firstDate: number | any = new Date();
     const secondDate: number | any = new Date(
@@ -155,7 +55,7 @@ const GetInfoManga = async ({
         Number(timeUpdate[3].split("-")[2])
     );
     const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
-    setDataManga({
+    return {
         title: titleManga,
         image: imageManga,
         timeLastUpdate: `${diffDays}`,
@@ -168,6 +68,6 @@ const GetInfoManga = async ({
         follower: follow,
         typeManga: typeManga,
         chapters: DataChapter.success ? DataChapter.chapters : [],
-    });
+    };
 };
 export default GetInfoManga;
