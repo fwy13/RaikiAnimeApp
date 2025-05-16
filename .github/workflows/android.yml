@@ -1,4 +1,4 @@
-name: Build & Publish Debug APK
+name: BuildApk
 
 on:
  push:
@@ -23,6 +23,6 @@ jobs:
     - name: Releasing using Hub
       uses: ShaunLWM/action-release-debugapk@master
       env:
-       GITHUB_TOKEN: ${{ secrets.TOKEN }}
+       GITHUB_TOKEN: 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
        APP_FOLDER: android/app
        RELEASE_TITLE: New Build
